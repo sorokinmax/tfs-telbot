@@ -1,0 +1,7 @@
+web:
+  host: "localhost"
+  port: "80"
+
+telegram:
+  botToken: "BOT:TOKEN"
+  chatID: -1234567890
