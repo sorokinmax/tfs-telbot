@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -89,27 +90,38 @@ func witCiCreate(ctx *gin.Context) {
 		log.Println(err)
 	}
 
-	m := jsonMap.(map[string]interface{})["detailedMessage"]
-	msg := m.(map[string]interface{})["markdown"]
+	p := jsonMap.(map[string]interface{})["resource"]
+	p1 := p.(map[string]interface{})["fields"]
+	p2 := p1.(map[string]interface{})["Microsoft.VSTS.Common.Priority"]
+	priority := fmt.Sprintf("%v", p2)
 
-	b, err := tb.NewBot(tb.Settings{
-		Token: cfg.Telegram.BotToken,
-	})
-	if err != nil {
-		log.Println(err)
-	} else {
-		group := tb.ChatID(cfg.Telegram.ChatID)
-		b.Send(group, msg)
+	if priority == "1" {
+
+		m := jsonMap.(map[string]interface{})["detailedMessage"]
+		msg := m.(map[string]interface{})["markdown"]
+
+		b, err := tb.NewBot(tb.Settings{
+			Token: cfg.Telegram.BotToken,
+		})
+		if err != nil {
+			log.Println(err)
+		} else {
+			group := tb.ChatID(cfg.Telegram.ChatID)
+			b.Send(group, msg)
+		}
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"status": "Done"})
 }
 
 func currentDir() string {
-	fullPath, err := os.Executable()
-	if err != nil {
-		panic(err)
+	if !DEBUG {
+		fullPath, err := os.Executable()
+		if err != nil {
+			panic(err)
+		}
+		path := filepath.Dir(fullPath)
+		return path
 	}
-	path := filepath.Dir(fullPath)
-	return path
+	return "."
 }
