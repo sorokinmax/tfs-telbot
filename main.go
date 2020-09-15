@@ -14,7 +14,7 @@ import (
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
-const DEBUG = false
+const DEBUG = true
 
 var logger service.Logger
 var cfg Config
@@ -76,12 +76,13 @@ func myMain() {
 	router := gin.Default()
 	router.HTMLRender = ginview.Default()
 
-	router.POST("/wit/ci/create", witCiCreate)
+	router.POST("/wit/ci/create", tfsWitCiCreate)
+	router.POST("/build/failed", tfsBuild)
 
 	router.Run(":" + cfg.Web.Port)
 }
 
-func witCiCreate(ctx *gin.Context) {
+func tfsWitCiCreate(ctx *gin.Context) {
 	var jsonMap interface{}
 
 	data, _ := ctx.GetRawData()
@@ -98,7 +99,7 @@ func witCiCreate(ctx *gin.Context) {
 	if priority == "1" {
 
 		m := jsonMap.(map[string]interface{})["detailedMessage"]
-		msg := m.(map[string]interface{})["markdown"]
+		msg := m.(map[string]interface{})["html"]
 
 		b, err := tb.NewBot(tb.Settings{
 			Token: cfg.Telegram.BotToken,
@@ -106,8 +107,58 @@ func witCiCreate(ctx *gin.Context) {
 		if err != nil {
 			log.Println(err)
 		} else {
-			group := tb.ChatID(cfg.Telegram.ChatID)
-			b.Send(group, msg)
+			group := tb.ChatID(cfg.Telegram.WitCiCreateChatID)
+			_, err = b.Send(group, msg)
+			if err != nil {
+				log.Println(err)
+			}
+		}
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"status": "Done"})
+}
+
+func tfsBuild(ctx *gin.Context) {
+	var jsonMap interface{}
+
+	data, _ := ctx.GetRawData()
+	err := json.Unmarshal(data, &jsonMap)
+	if err != nil {
+		log.Println(err)
+	}
+
+	p := jsonMap.(map[string]interface{})["detailedMessage"]
+	p1 := p.(map[string]interface{})["html"]
+	msg := fmt.Sprintf("%v", p1)
+
+	p = jsonMap.(map[string]interface{})["resource"]
+	p1 = p.(map[string]interface{})["buildNumber"]
+	buildNumber := fmt.Sprintf("%v", p1)
+
+	p = jsonMap.(map[string]interface{})["resource"]
+	p1 = p.(map[string]interface{})["dropLocation"]
+	dropLocation := fmt.Sprintf("%v", p1)
+
+	p = jsonMap.(map[string]interface{})["resource"]
+	p1 = p.(map[string]interface{})["definition"]
+	p2 := p1.(map[string]interface{})["name"]
+	definition := fmt.Sprintf("%v", p2)
+
+	msg += "\n\nBuild number: " + buildNumber + "\nDefinition: " + definition + "\nDrop location: " + dropLocation
+
+	b, err := tb.NewBot(tb.Settings{
+		Token: cfg.Telegram.BotToken,
+	})
+	if err != nil {
+		log.Println(err)
+	} else {
+		group := tb.ChatID(cfg.Telegram.BuildChatID)
+		var opts tb.SendOptions
+		opts.ParseMode = tb.ModeHTML
+		e, err := b.Send(group, msg, &opts)
+		log.Println(e)
+		if err != nil {
+			log.Println(err)
 		}
 	}
 

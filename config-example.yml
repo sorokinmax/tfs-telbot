@@ -4,4 +4,5 @@ web:
 
 telegram:
   botToken: "BOT:TOKEN"
-  chatID: -1234567890
+  witCiCreateChatID: -1234567890
+  buildChatID: -1234567890
