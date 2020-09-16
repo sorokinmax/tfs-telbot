@@ -14,7 +14,7 @@ import (
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
-const DEBUG = true
+const DEBUG = false
 
 var logger service.Logger
 var cfg Config
@@ -77,7 +77,7 @@ func myMain() {
 	router.HTMLRender = ginview.Default()
 
 	router.POST("/wit/ci/create", tfsWitCiCreate)
-	router.POST("/build/failed", tfsBuild)
+	router.POST("/build/report", tfsBuild)
 
 	router.Run(":" + cfg.Web.Port)
 }
@@ -130,21 +130,21 @@ func tfsBuild(ctx *gin.Context) {
 	p := jsonMap.(map[string]interface{})["detailedMessage"]
 	p1 := p.(map[string]interface{})["html"]
 	msg := fmt.Sprintf("%v", p1)
-
+	/*
+		p = jsonMap.(map[string]interface{})["resource"]
+		p1 = p.(map[string]interface{})["buildNumber"]
+		buildNumber := fmt.Sprintf("%v", p1)
+	*/
 	p = jsonMap.(map[string]interface{})["resource"]
-	p1 = p.(map[string]interface{})["buildNumber"]
-	buildNumber := fmt.Sprintf("%v", p1)
-
-	p = jsonMap.(map[string]interface{})["resource"]
-	p1 = p.(map[string]interface{})["dropLocation"]
-	dropLocation := fmt.Sprintf("%v", p1)
+	p1 = p.(map[string]interface{})["result"]
+	buildResult := fmt.Sprintf("%v", p1)
 
 	p = jsonMap.(map[string]interface{})["resource"]
 	p1 = p.(map[string]interface{})["definition"]
 	p2 := p1.(map[string]interface{})["name"]
 	definition := fmt.Sprintf("%v", p2)
 
-	msg += "\n\nBuild number: " + buildNumber + "\nDefinition: " + definition + "\nDrop location: " + dropLocation
+	msg += "\n\nDefinition: " + definition + "\nBuild result: " + buildResult
 
 	b, err := tb.NewBot(tb.Settings{
 		Token: cfg.Telegram.BotToken,
