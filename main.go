@@ -138,6 +138,17 @@ func tfsBuild(ctx *gin.Context) {
 	p = jsonMap.(map[string]interface{})["resource"]
 	p1 = p.(map[string]interface{})["result"]
 	buildResult := fmt.Sprintf("%v", p1)
+	switch buildResult {
+	case "succeeded":
+		buildResult += " ✅"
+		break
+	case "failed":
+		buildResult += " ❌"
+		break
+	case "partiallySucceeded":
+		buildResult += " ⚠️"
+		break
+	}
 
 	p = jsonMap.(map[string]interface{})["resource"]
 	p1 = p.(map[string]interface{})["definition"]
