@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -72,6 +73,15 @@ func main() {
 func myMain() {
 	readConfigFile(&cfg)
 
+	log.SetFlags(log.LstdFlags)
+	lf, err := os.OpenFile(currentDir()+"/output.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+	defer lf.Close()
+	multi := io.MultiWriter(os.Stdout, lf)
+	log.SetOutput(multi)
+
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.HTMLRender = ginview.Default()
@@ -127,6 +137,8 @@ func tfsBuild(ctx *gin.Context) {
 		log.Println(err)
 	}
 
+	log.Println(jsonMap)
+
 	p := jsonMap.(map[string]interface{})["detailedMessage"]
 	p1 := p.(map[string]interface{})["html"]
 	msg := fmt.Sprintf("%v", p1)
@@ -156,6 +168,8 @@ func tfsBuild(ctx *gin.Context) {
 	definition := fmt.Sprintf("%v", p2)
 
 	msg += "\n\nDefinition: " + definition + "\nBuild result: " + buildResult
+
+	log.Println(msg)
 
 	b, err := tb.NewBot(tb.Settings{
 		Token: cfg.Telegram.BotToken,
