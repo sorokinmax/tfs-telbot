@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
@@ -22,18 +23,44 @@ var cfg Config
 
 type program struct{}
 
+func myMain() {
+	gin.SetMode(gin.ReleaseMode)
+	f, _ := os.Create(currentDir() + "/web.log")
+	gin.DefaultWriter = io.MultiWriter(os.Stdout, f)
+	defer f.Close()
+
+	readConfigFile(&cfg)
+
+	router := gin.Default()
+	router.HTMLRender = ginview.Default()
+
+	router.POST("/wit/ci/create", tfsWitCiCreate)
+	router.POST("/build/report", tfsBuild)
+
+	router.Run(":" + cfg.Web.Port)
+}
+
 func (p *program) Start(s service.Service) error {
+	if service.Interactive() {
+		logger.Info("Running in terminal.")
+		myMain()
+	} else {
+		logger.Info("Running under service manager.")
+	}
+
 	// Start should not block. Do the actual work async.
 	go p.run()
 	return nil
 }
 
 func (p *program) Stop(s service.Service) error {
+	logger.Info("I'm Stopping")
 	// Stop should not block. Return with a few seconds.
 	return nil
 }
 
 func (p *program) run() {
+	logger.Infof("I'm running %v.", service.Platform())
 	myMain()
 }
 
@@ -55,6 +82,7 @@ func main() {
 		if len(os.Args) > 1 {
 			err = service.Control(s, os.Args[1])
 			if err != nil {
+				log.Printf("Valid actions: %q\n", service.ControlAction)
 				log.Fatal(err)
 			}
 			return
@@ -68,28 +96,6 @@ func main() {
 			logger.Error(err)
 		}
 	}
-}
-
-func myMain() {
-	readConfigFile(&cfg)
-
-	log.SetFlags(log.LstdFlags)
-	lf, err := os.OpenFile(currentDir()+"/output.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalf("error opening file: %v", err)
-	}
-	defer lf.Close()
-	multi := io.MultiWriter(os.Stdout, lf)
-	log.SetOutput(multi)
-
-	gin.SetMode(gin.ReleaseMode)
-	router := gin.Default()
-	router.HTMLRender = ginview.Default()
-
-	router.POST("/wit/ci/create", tfsWitCiCreate)
-	router.POST("/build/report", tfsBuild)
-
-	router.Run(":" + cfg.Web.Port)
 }
 
 func tfsWitCiCreate(ctx *gin.Context) {
@@ -134,10 +140,10 @@ func tfsBuild(ctx *gin.Context) {
 	data, _ := ctx.GetRawData()
 	err := json.Unmarshal(data, &jsonMap)
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
 	}
 
-	log.Println(jsonMap)
+	//logger.Info(jsonMap)
 
 	p := jsonMap.(map[string]interface{})["detailedMessage"]
 	p1 := p.(map[string]interface{})["html"]
@@ -167,15 +173,20 @@ func tfsBuild(ctx *gin.Context) {
 	p2 := p1.(map[string]interface{})["name"]
 	definition := fmt.Sprintf("%v", p2)
 
-	msg += "\n\nDefinition: " + definition + "\nBuild result: " + buildResult
+	msg += "\nDefinition: " + definition + "\nBuild result: " + buildResult
 
-	log.Println(msg)
+	msg = strings.ReplaceAll(msg, "<ul>", "")
+	msg = strings.ReplaceAll(msg, "</li>", "")
+	msg = strings.ReplaceAll(msg, "</ul>", "")
+	msg = strings.ReplaceAll(msg, "<li>", "⨠ ")
+
+	//log.Println(msg)
 
 	b, err := tb.NewBot(tb.Settings{
 		Token: cfg.Telegram.BotToken,
 	})
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
 	} else {
 		group := tb.ChatID(cfg.Telegram.BuildChatID)
 		var opts tb.SendOptions
@@ -183,7 +194,7 @@ func tfsBuild(ctx *gin.Context) {
 		e, err := b.Send(group, msg, &opts)
 		log.Println(e)
 		if err != nil {
-			log.Println(err)
+			logger.Error(err)
 		}
 	}
 
