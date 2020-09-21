@@ -16,8 +16,6 @@ import (
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
-const DEBUG = false
-
 var logger service.Logger
 var cfg Config
 
@@ -65,36 +63,33 @@ func (p *program) run() {
 }
 
 func main() {
-	if DEBUG {
-		myMain()
-	} else {
-		svcConfig := &service.Config{
-			Name:        "TFS-GoBot",
-			DisplayName: "TFS GoBot",
-			Description: "TFS notifier telegram bot",
-		}
 
-		prg := &program{}
-		s, err := service.New(prg, svcConfig)
+	svcConfig := &service.Config{
+		Name:        "TFS-GoBot",
+		DisplayName: "TFS GoBot",
+		Description: "TFS notifier telegram bot",
+	}
+
+	prg := &program{}
+	s, err := service.New(prg, svcConfig)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if len(os.Args) > 1 {
+		err = service.Control(s, os.Args[1])
 		if err != nil {
+			log.Printf("Valid actions: %q\n", service.ControlAction)
 			log.Fatal(err)
 		}
-		if len(os.Args) > 1 {
-			err = service.Control(s, os.Args[1])
-			if err != nil {
-				log.Printf("Valid actions: %q\n", service.ControlAction)
-				log.Fatal(err)
-			}
-			return
-		}
-		logger, err = s.Logger(nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		err = s.Run()
-		if err != nil {
-			logger.Error(err)
-		}
+		return
+	}
+	logger, err = s.Logger(nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = s.Run()
+	if err != nil {
+		logger.Error(err)
 	}
 }
 
@@ -202,13 +197,10 @@ func tfsBuild(ctx *gin.Context) {
 }
 
 func currentDir() string {
-	if !DEBUG {
-		fullPath, err := os.Executable()
-		if err != nil {
-			panic(err)
-		}
-		path := filepath.Dir(fullPath)
-		return path
+	fullPath, err := os.Executable()
+	if err != nil {
+		panic(err)
 	}
-	return "."
+	path := filepath.Dir(fullPath)
+	return path
 }
