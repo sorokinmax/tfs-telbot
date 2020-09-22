@@ -109,8 +109,36 @@ func tfsWitCiCreate(ctx *gin.Context) {
 
 	if priority == "1" {
 
-		m := jsonMap.(map[string]interface{})["detailedMessage"]
-		msg := m.(map[string]interface{})["html"]
+		p := jsonMap.(map[string]interface{})["message"]
+		p1 := p.(map[string]interface{})["html"]
+		msg := fmt.Sprintf("%v", p1)
+
+		p = jsonMap.(map[string]interface{})["resource"]
+		p1 = p.(map[string]interface{})["fields"]
+		p2 := p1.(map[string]interface{})["bm.Client"]
+		client := fmt.Sprintf("%v", p2)
+
+		p = jsonMap.(map[string]interface{})["resource"]
+		p1 = p.(map[string]interface{})["fields"]
+		p2 = p1.(map[string]interface{})["bm.ServerVersion"]
+		serverVersion := fmt.Sprintf("%v", p2)
+
+		p = jsonMap.(map[string]interface{})["resource"]
+		p1 = p.(map[string]interface{})["fields"]
+		p2 = p1.(map[string]interface{})["bm.IpadVersion"]
+		ipadVersion := fmt.Sprintf("%v", p2)
+
+		p = jsonMap.(map[string]interface{})["resource"]
+		p1 = p.(map[string]interface{})["fields"]
+		p2 = p1.(map[string]interface{})["bm.Zendesk"]
+		zendesk := fmt.Sprintf("%v", p2)
+
+		msg += "\nClient: " + client + "\nServer version: " + serverVersion + "\niPad version: " + ipadVersion + "\nZendesk: " + zendesk
+
+		msg = strings.ReplaceAll(msg, "<ul>", "")
+		msg = strings.ReplaceAll(msg, "</li>", "")
+		msg = strings.ReplaceAll(msg, "</ul>", "")
+		msg = strings.ReplaceAll(msg, "<li>", "⨠ ")
 
 		b, err := tb.NewBot(tb.Settings{
 			Token: cfg.Telegram.BotToken,
@@ -119,9 +147,12 @@ func tfsWitCiCreate(ctx *gin.Context) {
 			log.Println(err)
 		} else {
 			group := tb.ChatID(cfg.Telegram.WitCiCreateChatID)
-			_, err = b.Send(group, msg)
+			var opts tb.SendOptions
+			opts.ParseMode = tb.ModeHTML
+			e, err := b.Send(group, msg, &opts)
+			log.Println(e)
 			if err != nil {
-				log.Println(err)
+				logger.Error(err)
 			}
 		}
 	}
