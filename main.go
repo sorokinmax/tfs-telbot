@@ -238,20 +238,21 @@ func tfsReleaseBegin(ctx *gin.Context) {
 	}
 
 	//logger.Info(jsonMap)
-	log.Println(string(data))
+	//log.Println(string(data))
 
 	p := jsonMap.(map[string]interface{})["detailedMessage"]
 	p1 := p.(map[string]interface{})["html"]
 	msg := fmt.Sprintf("%v", p1)
 
+	/*
+		p = jsonMap.(map[string]interface{})["resource"]
+		p1 = p.(map[string]interface{})["environment"]
+		p2 := p1.(map[string]interface{})["name"]
+		envName := fmt.Sprintf("%v", p2)
+	*/
 	p = jsonMap.(map[string]interface{})["resource"]
 	p1 = p.(map[string]interface{})["environment"]
-	p2 := p1.(map[string]interface{})["name"]
-	envName := fmt.Sprintf("%v", p2)
-
-	p = jsonMap.(map[string]interface{})["resource"]
-	p1 = p.(map[string]interface{})["environment"]
-	p2 = p1.(map[string]interface{})["variables"]
+	p2 := p1.(map[string]interface{})["variables"]
 	p3 := p2.(map[string]interface{})["TargetServer"]
 	p4 := p3.(map[string]interface{})["value"]
 	targetServer := fmt.Sprintf("%v", p4)
@@ -274,12 +275,11 @@ func tfsReleaseBegin(ctx *gin.Context) {
 
 	p = jsonMap.(map[string]interface{})["resource"]
 	p1 = p.(map[string]interface{})["release"]
-	p2 = p1.(map[string]interface{})["artifacts"]
-	p3 = p2.(map[string]interface{})
-	p4 = p2.(map[string]interface{})["definitionReference"]
-	p5 := p4.(map[string]interface{})["version"]
-	p6 := p5.(map[string]interface{})["name"]
-	buildName := fmt.Sprintf("%v", p6)
+	p2 = p1.(map[string]interface{})["artifacts"].([]interface{})[0]
+	p3 = p2.(map[string]interface{})["definitionReference"]
+	p4 = p3.(map[string]interface{})["version"]
+	p5 := p4.(map[string]interface{})["name"]
+	buildName := fmt.Sprintf("%v", p5)
 
 	/*
 		p = jsonMap.(map[string]interface{})["resource"]
@@ -288,7 +288,7 @@ func tfsReleaseBegin(ctx *gin.Context) {
 		scheduledDeploymentTime := fmt.Sprintf("%v", p2)
 	*/
 
-	msg += "\nEnvironment: " + envName + "\nTarget server: " + targetServer + "\nRelease name: " + releaseName + "\nBuild name: " + buildName + "\nCreated by: " + createdBy + "\nTime to deploy: " + timeToDeploy
+	msg += "\n" + "\nTarget server: " + targetServer + "\nRelease name: " + releaseName + "\nBuild name: " + buildName + "\nCreated by: " + createdBy + "\n\nTime to deploy: " + timeToDeploy
 
 	msg = strings.ReplaceAll(msg, "<br>", "\n")
 	msg = strings.ReplaceAll(msg, "<ul>", "")
