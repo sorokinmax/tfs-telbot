@@ -33,7 +33,8 @@ func myMain() {
 	router.HTMLRender = ginview.Default()
 
 	router.POST("/wit/ci/create", tfsWitCiCreate)
-	router.POST("/build/report", tfsBuild)
+	router.POST("/build/report", tfsBuildReport)
+	router.POST("/release/begin", tfsReleaseBegin)
 
 	router.Run(":" + cfg.Web.Port)
 }
@@ -133,7 +134,7 @@ func tfsWitCiCreate(ctx *gin.Context) {
 		p2 = p1.(map[string]interface{})["bm.Zendesk"]
 		zendesk := fmt.Sprintf("%v", p2)
 
-		msg += "\nClient: " + client + "\nServer version: " + serverVersion + "\niPad version: " + ipadVersion + "\nZendesk: " + zendesk
+		msg += "\n\nClient: " + client + "\nServer version: " + serverVersion + "\niPad version: " + ipadVersion + "\nZendesk: " + zendesk
 
 		msg = strings.ReplaceAll(msg, "<ul>", "")
 		msg = strings.ReplaceAll(msg, "</li>", "")
@@ -160,7 +161,7 @@ func tfsWitCiCreate(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"status": "Done"})
 }
 
-func tfsBuild(ctx *gin.Context) {
+func tfsBuildReport(ctx *gin.Context) {
 	var jsonMap interface{}
 
 	data, _ := ctx.GetRawData()
@@ -201,6 +202,95 @@ func tfsBuild(ctx *gin.Context) {
 
 	msg += "\nDefinition: " + definition + "\nBuild result: " + buildResult
 
+	msg = strings.ReplaceAll(msg, "<ul>", "")
+	msg = strings.ReplaceAll(msg, "</li>", "")
+	msg = strings.ReplaceAll(msg, "</ul>", "")
+	msg = strings.ReplaceAll(msg, "<li>", "⨠ ")
+
+	//log.Println(msg)
+
+	b, err := tb.NewBot(tb.Settings{
+		Token: cfg.Telegram.BotToken,
+	})
+	if err != nil {
+		logger.Error(err)
+	} else {
+		group := tb.ChatID(cfg.Telegram.BuildChatID)
+		var opts tb.SendOptions
+		opts.ParseMode = tb.ModeHTML
+		e, err := b.Send(group, msg, &opts)
+		log.Println(e)
+		if err != nil {
+			logger.Error(err)
+		}
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"status": "Done"})
+}
+
+func tfsReleaseBegin(ctx *gin.Context) {
+	var jsonMap interface{}
+
+	data, _ := ctx.GetRawData()
+	err := json.Unmarshal(data, &jsonMap)
+	if err != nil {
+		logger.Error(err)
+	}
+
+	//logger.Info(jsonMap)
+	log.Println(string(data))
+
+	p := jsonMap.(map[string]interface{})["detailedMessage"]
+	p1 := p.(map[string]interface{})["html"]
+	msg := fmt.Sprintf("%v", p1)
+
+	p = jsonMap.(map[string]interface{})["resource"]
+	p1 = p.(map[string]interface{})["environment"]
+	p2 := p1.(map[string]interface{})["name"]
+	envName := fmt.Sprintf("%v", p2)
+
+	p = jsonMap.(map[string]interface{})["resource"]
+	p1 = p.(map[string]interface{})["environment"]
+	p2 = p1.(map[string]interface{})["variables"]
+	p3 := p2.(map[string]interface{})["TargetServer"]
+	p4 := p3.(map[string]interface{})["value"]
+	targetServer := fmt.Sprintf("%v", p4)
+
+	p = jsonMap.(map[string]interface{})["resource"]
+	p1 = p.(map[string]interface{})["environment"]
+	p2 = p1.(map[string]interface{})["timeToDeploy"]
+	timeToDeploy := fmt.Sprintf("%v", p2)
+
+	p = jsonMap.(map[string]interface{})["resource"]
+	p1 = p.(map[string]interface{})["release"]
+	p2 = p1.(map[string]interface{})["name"]
+	releaseName := fmt.Sprintf("%v", p2)
+
+	p = jsonMap.(map[string]interface{})["resource"]
+	p1 = p.(map[string]interface{})["release"]
+	p2 = p1.(map[string]interface{})["createdBy"]
+	p3 = p2.(map[string]interface{})["displayName"]
+	createdBy := fmt.Sprintf("%v", p3)
+
+	p = jsonMap.(map[string]interface{})["resource"]
+	p1 = p.(map[string]interface{})["release"]
+	p2 = p1.(map[string]interface{})["artifacts"]
+	p3 = p2.(map[string]interface{})
+	p4 = p2.(map[string]interface{})["definitionReference"]
+	p5 := p4.(map[string]interface{})["version"]
+	p6 := p5.(map[string]interface{})["name"]
+	buildName := fmt.Sprintf("%v", p6)
+
+	/*
+		p = jsonMap.(map[string]interface{})["resource"]
+		p1 = p.(map[string]interface{})["environment"]
+		p2 = p1.(map[string]interface{})["scheduledDeploymentTime"]
+		scheduledDeploymentTime := fmt.Sprintf("%v", p2)
+	*/
+
+	msg += "\nEnvironment: " + envName + "\nTarget server: " + targetServer + "\nRelease name: " + releaseName + "\nBuild name: " + buildName + "\nCreated by: " + createdBy + "\nTime to deploy: " + timeToDeploy
+
+	msg = strings.ReplaceAll(msg, "<br>", "\n")
 	msg = strings.ReplaceAll(msg, "<ul>", "")
 	msg = strings.ReplaceAll(msg, "</li>", "")
 	msg = strings.ReplaceAll(msg, "</ul>", "")
