@@ -238,7 +238,7 @@ func tfsReleaseBegin(ctx *gin.Context) {
 	}
 
 	//logger.Info(jsonMap)
-	//log.Println(string(data))
+	log.Println(string(data))
 
 	p := jsonMap.(map[string]interface{})["detailedMessage"]
 	p1 := p.(map[string]interface{})["html"]
@@ -290,12 +290,15 @@ func tfsReleaseBegin(ctx *gin.Context) {
 
 	msg += "\n" + "\nTarget server: " + targetServer + "\nRelease name: " + releaseName + "\nBuild name: " + buildName + "\nCreated by: " + createdBy + "\n\nTime to deploy: " + timeToDeploy
 
+	msg = strings.ReplaceAll(msg, "<nil>", "")
+	msg = strings.ReplaceAll(msg, "</nil>", "")
 	msg = strings.ReplaceAll(msg, "<br>", "\n")
 	msg = strings.ReplaceAll(msg, "<ul>", "")
 	msg = strings.ReplaceAll(msg, "</li>", "")
 	msg = strings.ReplaceAll(msg, "</ul>", "")
 	msg = strings.ReplaceAll(msg, "<li>", "⨠ ")
 
+	logger.Info(msg)
 	//log.Println(msg)
 
 	b, err := tb.NewBot(tb.Settings{
