@@ -163,6 +163,7 @@ func tfsWitCiCreate(ctx *gin.Context) {
 
 func tfsBuildReport(ctx *gin.Context) {
 	var jsonMap interface{}
+	var msg = ""
 
 	data, _ := ctx.GetRawData()
 	err := json.Unmarshal(data, &jsonMap)
@@ -174,7 +175,7 @@ func tfsBuildReport(ctx *gin.Context) {
 
 	p := jsonMap.(map[string]interface{})["detailedMessage"]
 	p1 := p.(map[string]interface{})["html"]
-	msg := fmt.Sprintf("%v", p1)
+	detailedMessage := fmt.Sprintf("%v", p1)
 	/*
 		p = jsonMap.(map[string]interface{})["resource"]
 		p1 = p.(map[string]interface{})["buildNumber"]
@@ -185,13 +186,13 @@ func tfsBuildReport(ctx *gin.Context) {
 	buildResult := fmt.Sprintf("%v", p1)
 	switch buildResult {
 	case "succeeded":
-		buildResult += " ✅"
+		buildResult = "✅ " + buildResult
 		break
 	case "failed":
-		buildResult += " ❌"
+		buildResult = "❌ " + buildResult
 		break
 	case "partiallySucceeded":
-		buildResult += " ⚠️"
+		buildResult = "⚠️ " + buildResult
 		break
 	}
 
@@ -200,14 +201,16 @@ func tfsBuildReport(ctx *gin.Context) {
 	p2 := p1.(map[string]interface{})["name"]
 	definition := fmt.Sprintf("%v", p2)
 
-	msg += "\nDefinition: " + definition + "\nBuild result: " + buildResult
+	msg = buildResult + "\n\n" + detailedMessage + "\nDefinition: " + definition
 
+	msg = strings.ReplaceAll(msg, "<nil>", "")
+	msg = strings.ReplaceAll(msg, "</nil>", "")
 	msg = strings.ReplaceAll(msg, "<ul>", "")
 	msg = strings.ReplaceAll(msg, "</li>", "")
 	msg = strings.ReplaceAll(msg, "</ul>", "")
 	msg = strings.ReplaceAll(msg, "<li>", "⨠ ")
 
-	//log.Println(msg)
+	logger.Info(msg)
 
 	b, err := tb.NewBot(tb.Settings{
 		Token: cfg.Telegram.BotToken,
@@ -230,6 +233,7 @@ func tfsBuildReport(ctx *gin.Context) {
 
 func tfsReleaseBegin(ctx *gin.Context) {
 	var jsonMap interface{}
+	var msg = ""
 
 	data, _ := ctx.GetRawData()
 	err := json.Unmarshal(data, &jsonMap)
@@ -242,7 +246,7 @@ func tfsReleaseBegin(ctx *gin.Context) {
 
 	p := jsonMap.(map[string]interface{})["detailedMessage"]
 	p1 := p.(map[string]interface{})["html"]
-	msg := fmt.Sprintf("%v", p1)
+	detailedMessage := fmt.Sprintf("%v", p1)
 
 	/*
 		p = jsonMap.(map[string]interface{})["resource"]
@@ -288,9 +292,9 @@ func tfsReleaseBegin(ctx *gin.Context) {
 		scheduledDeploymentTime := fmt.Sprintf("%v", p2)
 	*/
 
-	msg += "\n" + "\nTarget server: " + targetServer + "\nRelease name: " + releaseName + "\nBuild name: " + buildName + "\nCreated by: " + createdBy + "\n\nTime to deploy: " + timeToDeploy
+	msg = "♿️ deploying\n" + detailedMessage + "\n" + "\nTarget server: " + targetServer + "\nRelease name: " + releaseName + "\nBuild name: " + buildName + "\nCreated by: " + createdBy + "\n\nTime to deploy: " + timeToDeploy
 
-	msg = strings.ReplaceAll(msg, "<nil>", "")
+	msg = strings.ReplaceAll(msg, "<nil>", "nil")
 	msg = strings.ReplaceAll(msg, "</nil>", "")
 	msg = strings.ReplaceAll(msg, "<br>", "\n")
 	msg = strings.ReplaceAll(msg, "<ul>", "")
