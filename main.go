@@ -248,79 +248,81 @@ func tfsReleaseBegin(ctx *gin.Context) {
 	p1 := p.(map[string]interface{})["html"]
 	detailedMessage := fmt.Sprintf("%v", p1)
 
-	/*
+	if strings.Contains(detailedMessage, ">DEV<") {
+
+		/*
+			p = jsonMap.(map[string]interface{})["resource"]
+			p1 = p.(map[string]interface{})["environment"]
+			p2 := p1.(map[string]interface{})["name"]
+			envName := fmt.Sprintf("%v", p2)
+		*/
 		p = jsonMap.(map[string]interface{})["resource"]
 		p1 = p.(map[string]interface{})["environment"]
-		p2 := p1.(map[string]interface{})["name"]
-		envName := fmt.Sprintf("%v", p2)
-	*/
-	p = jsonMap.(map[string]interface{})["resource"]
-	p1 = p.(map[string]interface{})["environment"]
-	p2 := p1.(map[string]interface{})["variables"]
-	p3 := p2.(map[string]interface{})["TargetServer"]
-	p4 := p3.(map[string]interface{})["value"]
-	targetServer := fmt.Sprintf("%v", p4)
+		p2 := p1.(map[string]interface{})["variables"]
+		p3 := p2.(map[string]interface{})["TargetServer"]
+		p4 := p3.(map[string]interface{})["value"]
+		targetServer := fmt.Sprintf("%v", p4)
 
-	p = jsonMap.(map[string]interface{})["resource"]
-	p1 = p.(map[string]interface{})["environment"]
-	p2 = p1.(map[string]interface{})["timeToDeploy"]
-	timeToDeploy := fmt.Sprintf("%v", p2)
-
-	p = jsonMap.(map[string]interface{})["resource"]
-	p1 = p.(map[string]interface{})["release"]
-	p2 = p1.(map[string]interface{})["name"]
-	releaseName := fmt.Sprintf("%v", p2)
-
-	p = jsonMap.(map[string]interface{})["resource"]
-	p1 = p.(map[string]interface{})["release"]
-	p2 = p1.(map[string]interface{})["createdBy"]
-	p3 = p2.(map[string]interface{})["displayName"]
-	createdBy := fmt.Sprintf("%v", p3)
-
-	p = jsonMap.(map[string]interface{})["resource"]
-	p1 = p.(map[string]interface{})["release"]
-	p2 = p1.(map[string]interface{})["artifacts"].([]interface{})[0]
-	p3 = p2.(map[string]interface{})["definitionReference"]
-	p4 = p3.(map[string]interface{})["version"]
-	p5 := p4.(map[string]interface{})["name"]
-	buildName := fmt.Sprintf("%v", p5)
-
-	/*
 		p = jsonMap.(map[string]interface{})["resource"]
 		p1 = p.(map[string]interface{})["environment"]
-		p2 = p1.(map[string]interface{})["scheduledDeploymentTime"]
-		scheduledDeploymentTime := fmt.Sprintf("%v", p2)
-	*/
+		p2 = p1.(map[string]interface{})["timeToDeploy"]
+		timeToDeploy := fmt.Sprintf("%v", p2)
 
-	msg = "♿️ deploying\n" + detailedMessage + "\n" + "\nTarget server: " + targetServer + "\nRelease name: " + releaseName + "\nBuild name: " + buildName + "\nCreated by: " + createdBy + "\n\nTime to deploy: " + timeToDeploy
+		p = jsonMap.(map[string]interface{})["resource"]
+		p1 = p.(map[string]interface{})["release"]
+		p2 = p1.(map[string]interface{})["name"]
+		releaseName := fmt.Sprintf("%v", p2)
 
-	msg = strings.ReplaceAll(msg, "<nil>", "nil")
-	msg = strings.ReplaceAll(msg, "</nil>", "")
-	msg = strings.ReplaceAll(msg, "<br>", "\n")
-	msg = strings.ReplaceAll(msg, "<ul>", "")
-	msg = strings.ReplaceAll(msg, "</li>", "")
-	msg = strings.ReplaceAll(msg, "</ul>", "")
-	msg = strings.ReplaceAll(msg, "<li>", "⨠ ")
+		p = jsonMap.(map[string]interface{})["resource"]
+		p1 = p.(map[string]interface{})["release"]
+		p2 = p1.(map[string]interface{})["createdBy"]
+		p3 = p2.(map[string]interface{})["displayName"]
+		createdBy := fmt.Sprintf("%v", p3)
 
-	logger.Info(msg)
-	//log.Println(msg)
+		p = jsonMap.(map[string]interface{})["resource"]
+		p1 = p.(map[string]interface{})["release"]
+		p2 = p1.(map[string]interface{})["artifacts"].([]interface{})[0]
+		p3 = p2.(map[string]interface{})["definitionReference"]
+		p4 = p3.(map[string]interface{})["version"]
+		p5 := p4.(map[string]interface{})["name"]
+		buildName := fmt.Sprintf("%v", p5)
 
-	b, err := tb.NewBot(tb.Settings{
-		Token: cfg.Telegram.BotToken,
-	})
-	if err != nil {
-		logger.Error(err)
-	} else {
-		group := tb.ChatID(cfg.Telegram.BuildChatID)
-		var opts tb.SendOptions
-		opts.ParseMode = tb.ModeHTML
-		e, err := b.Send(group, msg, &opts)
-		log.Println(e)
+		/*
+			p = jsonMap.(map[string]interface{})["resource"]
+			p1 = p.(map[string]interface{})["environment"]
+			p2 = p1.(map[string]interface{})["scheduledDeploymentTime"]
+			scheduledDeploymentTime := fmt.Sprintf("%v", p2)
+		*/
+
+		msg = "♿️ deploying\n" + detailedMessage + "\n" + "\nTarget server: " + targetServer + "\nRelease name: " + releaseName + "\nBuild name: " + buildName + "\nCreated by: " + createdBy + "\n\nTime to deploy: " + timeToDeploy
+
+		msg = strings.ReplaceAll(msg, "<nil>", "nil")
+		msg = strings.ReplaceAll(msg, "</nil>", "")
+		msg = strings.ReplaceAll(msg, "<br>", "\n")
+		msg = strings.ReplaceAll(msg, "<ul>", "")
+		msg = strings.ReplaceAll(msg, "</li>", "")
+		msg = strings.ReplaceAll(msg, "</ul>", "")
+		msg = strings.ReplaceAll(msg, "<li>", "⨠ ")
+
+		logger.Info(msg)
+		//log.Println(msg)
+
+		b, err := tb.NewBot(tb.Settings{
+			Token: cfg.Telegram.BotToken,
+		})
 		if err != nil {
 			logger.Error(err)
+		} else {
+			group := tb.ChatID(cfg.Telegram.BuildChatID)
+			var opts tb.SendOptions
+			opts.ParseMode = tb.ModeHTML
+			e, err := b.Send(group, msg, &opts)
+			log.Println(e)
+			if err != nil {
+				logger.Error(err)
+			}
 		}
 	}
-
 	ctx.JSON(http.StatusOK, gin.H{"status": "Done"})
 }
 
