@@ -242,13 +242,13 @@ func tfsReleaseBegin(ctx *gin.Context) {
 	}
 
 	//logger.Info(jsonMap)
-	log.Println(string(data))
+	logger.Info(string(data))
 
 	p := jsonMap.(map[string]interface{})["detailedMessage"]
 	p1 := p.(map[string]interface{})["html"]
 	detailedMessage := fmt.Sprintf("%v", p1)
 
-	if strings.Contains(detailedMessage, ">DEV<") {
+	if strings.Contains(strings.ToLower(detailedMessage), strings.ToLower(">DEV<")) {
 
 		/*
 			p = jsonMap.(map[string]interface{})["resource"]
