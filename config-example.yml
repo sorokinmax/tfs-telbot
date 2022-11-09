@@ -1,8 +1,15 @@
 web:
-  host: "localhost"
+  host: ""
   port: "80"
 
 telegram:
   botToken: "BOT:TOKEN"
   witCiCreateChatID: -1234567890
   buildChatID: -1234567890
+
+excludedPipelines:
+  build:
+    - "pipeline1"
+  release:
+    - "pipeline11"
+    - "pipeline23"
