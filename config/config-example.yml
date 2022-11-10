@@ -1,11 +1,14 @@
+# web binding
 web:
   host: ""
   port: "80"
 
+# 
 telegram:
   botToken: "BOT:TOKEN"
-  witCiCreateChatID: -1234567890
+  witChatID: -1234567890
   buildChatID: -1234567890
+  deployChatID: -1234567890
 
 excludedPipelines:
   build:

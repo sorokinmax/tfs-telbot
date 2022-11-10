@@ -15,9 +15,10 @@ type Config struct {
 		Port string `yaml:"port"`
 	} `yaml:"web"`
 	Telegram struct {
-		BotToken          string `yaml:"botToken"`
-		WitCiCreateChatID int64  `yaml:"witCiCreateChatID"`
-		BuildChatID       int    `yaml:"buildChatID"`
+		BotToken     string `yaml:"botToken"`
+		WitChatID    int64  `yaml:"witChatID"`
+		BuildChatID  int    `yaml:"buildChatID"`
+		DeployChatID int    `yaml:"deployChatID"`
 	} `yaml:"telegram"`
 	ExcludedPipelines struct {
 		Build   []string `yaml:"build"`

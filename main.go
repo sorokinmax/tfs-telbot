@@ -136,7 +136,7 @@ func tfsWitCiCreate(ctx *gin.Context) {
 		if err != nil {
 			log.Println(err)
 		} else {
-			group := tb.ChatID(cfg.Telegram.WitCiCreateChatID)
+			group := tb.ChatID(cfg.Telegram.WitChatID)
 			var opts tb.SendOptions
 			opts.ParseMode = tb.ModeHTML
 			e, err := b.Send(group, msg, &opts)

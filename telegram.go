@@ -6,14 +6,14 @@ import (
 	tb "gopkg.in/telebot.v3"
 )
 
-func tgSendMessage(msg string) (responce *tb.Message) {
+func tgSendMessage(msg string, chatID int) (responce *tb.Message) {
 	tbot, err := tb.NewBot(tb.Settings{
 		Token: cfg.Telegram.BotToken,
 	})
 	if err != nil {
 		log.Println(err)
 	} else {
-		group := tb.ChatID(cfg.Telegram.BuildChatID)
+		group := tb.ChatID(chatID)
 		var opts tb.SendOptions
 		opts.ParseMode = tb.ModeHTML
 		responce, err = tbot.Send(group, msg, &opts)

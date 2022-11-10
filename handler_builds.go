@@ -42,7 +42,7 @@ func tfsBuildReport(ctx *gin.Context) {
 	msg += build.Message.HTML + "\n\n"
 	msg += fmt.Sprintf(`<a href='%s%s/_build/results?buildId=%d&view=logs'>Logs</a>`, build.ResourceContainers.Collection.BaseURL, build.Resource.Project.Name, build.Resource.ID)
 
-	tgSendMessage(msg)
+	tgSendMessage(msg, cfg.Telegram.BuildChatID)
 
 	/*
 		p := jsonMap.(map[string]interface{})["detailedMessage"]

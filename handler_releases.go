@@ -47,7 +47,7 @@ func tfsReleaseBegin(ctx *gin.Context) {
 	msg += release.Message.HTML + "\n\n"
 	msg += fmt.Sprintf(`<a href='%s%s/_releaseProgress?_a=release-environment-logs&releaseId=%d'>Logs</a>`, release.ResourceContainers.Collection.BaseURL, release.Resource.Project.Name, release.Resource.Environment.ReleaseID)
 
-	tgSendMessage(msg)
+	tgSendMessage(msg, cfg.Telegram.DeployChatID)
 
 	ctx.JSON(http.StatusOK, gin.H{"status": "Done"})
 }
