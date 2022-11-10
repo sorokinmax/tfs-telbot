@@ -3,13 +3,23 @@ web:
   host: ""
   port: "80"
 
-# 
+# Sections below can be changed without restarting the application. Config reading period is 1 time per minute.
+
+# [botToken]
+# Bot token can obtain from @BotFather.
+# Use the /newbot command to create a new bot. The Bot Father will ask you for a name and username, then generate an authorization token for your new bot.
+
+# [xxxChatIDs]
+# Specify the ID of channels or chats where notifications will be sent
+# To get their ID just Forward a message from your channel to This Bot: (https://telegram.me/getidsbot)
+
 telegram:
   botToken: "BOT:TOKEN"
   witChatID: -1234567890
   buildChatID: -1234567890
   deployChatID: -1234567890
 
+# If you don't want to receive notifications from some pipelines, just specify them here
 excludedPipelines:
   build:
     - "pipeline1"
