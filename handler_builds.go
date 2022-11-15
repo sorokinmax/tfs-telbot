@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,6 +16,7 @@ func tfsBuildReport(ctx *gin.Context) {
 	)
 	err := ctx.BindJSON(&build)
 	if err != nil {
+		log.Println(err.Error())
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "json binding error"})
 		return
 	}
