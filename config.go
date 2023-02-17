@@ -11,14 +11,16 @@ import (
 // Config struct
 type Config struct {
 	Web struct {
-		Host string `yaml:"host"`
-		Port string `yaml:"port"`
+		Host  string `yaml:"host"`
+		Port  string `yaml:"port"`
+		Debug bool   `yaml:"debug"`
 	} `yaml:"web"`
 	Telegram struct {
-		BotToken     string `yaml:"botToken"`
-		WitChatID    int64  `yaml:"witChatID"`
-		BuildChatID  int    `yaml:"buildChatID"`
-		DeployChatID int    `yaml:"deployChatID"`
+		BotToken        string `yaml:"botToken"`
+		CIUpdatesChatID int    `yaml:"ciUpdatesChatID"`
+		CICreatesChatID int    `yaml:"ciCreatesChatID"`
+		BuildChatID     int    `yaml:"buildChatID"`
+		DeployChatID    int    `yaml:"deployChatID"`
 	} `yaml:"telegram"`
 	ExcludedPipelines struct {
 		Build   []string `yaml:"build"`

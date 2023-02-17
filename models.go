@@ -2,6 +2,240 @@ package main
 
 import "time"
 
+type WITCIUpdate struct {
+	SubscriptionID string `json:"subscriptionId"`
+	NotificationID int    `json:"notificationId"`
+	ID             string `json:"id"`
+	EventType      string `json:"eventType"`
+	PublisherID    string `json:"publisherId"`
+	Message        struct {
+		HTML string `json:"html"`
+	} `json:"message"`
+	DetailedMessage struct {
+		HTML string `json:"html"`
+	} `json:"detailedMessage"`
+	Resource struct {
+		ID         int `json:"id"`
+		WorkItemID int `json:"workItemId"`
+		Rev        int `json:"rev"`
+		RevisedBy  struct {
+			ID          string `json:"id"`
+			Name        string `json:"name"`
+			DisplayName string `json:"displayName"`
+			URL         string `json:"url"`
+			Links       struct {
+				Avatar struct {
+					Href string `json:"href"`
+				} `json:"avatar"`
+			} `json:"_links"`
+			UniqueName string `json:"uniqueName"`
+			ImageURL   string `json:"imageUrl"`
+			Descriptor string `json:"descriptor"`
+		} `json:"revisedBy"`
+		RevisedDate time.Time `json:"revisedDate"`
+		Fields      struct {
+			SystemRev struct {
+				OldValue int `json:"oldValue"`
+				NewValue int `json:"newValue"`
+			} `json:"System.Rev"`
+			SystemAuthorizedDate struct {
+				OldValue time.Time `json:"oldValue"`
+				NewValue time.Time `json:"newValue"`
+			} `json:"System.AuthorizedDate"`
+			SystemRevisedDate struct {
+				OldValue time.Time `json:"oldValue"`
+				NewValue time.Time `json:"newValue"`
+			} `json:"System.RevisedDate"`
+			SystemChangedDate struct {
+				OldValue time.Time `json:"oldValue"`
+				NewValue time.Time `json:"newValue"`
+			} `json:"System.ChangedDate"`
+			SystemWatermark struct {
+				OldValue int `json:"oldValue"`
+				NewValue int `json:"newValue"`
+			} `json:"System.Watermark"`
+			MicrosoftVSTSTCMSystemInfo struct {
+				OldValue string `json:"oldValue"`
+				NewValue string `json:"newValue"`
+			} `json:"Microsoft.VSTS.TCM.SystemInfo"`
+		} `json:"fields"`
+		Links struct {
+			Self struct {
+				Href string `json:"href"`
+			} `json:"self"`
+			WorkItemUpdates struct {
+				Href string `json:"href"`
+			} `json:"workItemUpdates"`
+			Parent struct {
+				Href string `json:"href"`
+			} `json:"parent"`
+			HTML struct {
+				Href string `json:"href"`
+			} `json:"html"`
+		} `json:"_links"`
+		URL      string `json:"url"`
+		Revision struct {
+			ID     int `json:"id"`
+			Rev    int `json:"rev"`
+			Fields struct {
+				SystemAreaPath                                      string    `json:"System.AreaPath"`
+				SystemTeamProject                                   string    `json:"System.TeamProject"`
+				SystemIterationPath                                 string    `json:"System.IterationPath"`
+				SystemWorkItemType                                  string    `json:"System.WorkItemType"`
+				SystemState                                         string    `json:"System.State"`
+				SystemReason                                        string    `json:"System.Reason"`
+				SystemCreatedDate                                   time.Time `json:"System.CreatedDate"`
+				SystemCreatedBy                                     string    `json:"System.CreatedBy"`
+				SystemChangedDate                                   time.Time `json:"System.ChangedDate"`
+				SystemChangedBy                                     string    `json:"System.ChangedBy"`
+				SystemCommentCount                                  int       `json:"System.CommentCount"`
+				SystemTitle                                         string    `json:"System.Title"`
+				SystemBoardColumn                                   string    `json:"System.BoardColumn"`
+				SystemBoardColumnDone                               bool      `json:"System.BoardColumnDone"`
+				MicrosoftVSTSCommonPriority                         int       `json:"Microsoft.VSTS.Common.Priority"`
+				MicrosoftVSTSCommonSeverity                         string    `json:"Microsoft.VSTS.Common.Severity"`
+				MicrosoftVSTSCommonValueArea                        string    `json:"Microsoft.VSTS.Common.ValueArea"`
+				BmClient                                            string    `json:"bm.Client"`
+				BmPlatform                                          string    `json:"bm.Platform"`
+				WEF54E1C90D03E24593955A6C6D847649D5KanbanColumn     string    `json:"WEF_54E1C90D03E24593955A6C6D847649D5_Kanban.Column"`
+				WEF54E1C90D03E24593955A6C6D847649D5KanbanColumnDone bool      `json:"WEF_54E1C90D03E24593955A6C6D847649D5_Kanban.Column.Done"`
+				BmServerVersion                                     string    `json:"bm.ServerVersion"`
+				BmIpadVersion                                       string    `json:"bm.IpadVersion"`
+				BmAndroidVersion                                    string    `json:"bm.AndroidVersion"`
+				WEF461E61775E55407092925710D059FC79KanbanColumn     string    `json:"WEF_461E61775E55407092925710D059FC79_Kanban.Column"`
+				WEF461E61775E55407092925710D059FC79KanbanColumnDone bool      `json:"WEF_461E61775E55407092925710D059FC79_Kanban.Column.Done"`
+				BmZendesk                                           bool      `json:"bm.Zendesk"`
+				BmContract                                          bool      `json:"bm.Contract"`
+				TimeCompletedWorkQA                                 int       `json:"time.CompletedWorkQA"`
+				SystemDescription                                   string    `json:"System.Description"`
+				MicrosoftVSTSTCMSystemInfo                          string    `json:"Microsoft.VSTS.TCM.SystemInfo"`
+			} `json:"fields"`
+			Links struct {
+				Self struct {
+					Href string `json:"href"`
+				} `json:"self"`
+				WorkItemRevisions struct {
+					Href string `json:"href"`
+				} `json:"workItemRevisions"`
+				Parent struct {
+					Href string `json:"href"`
+				} `json:"parent"`
+			} `json:"_links"`
+			URL string `json:"url"`
+		} `json:"revision"`
+	} `json:"resource"`
+	ResourceVersion    string `json:"resourceVersion"`
+	ResourceContainers struct {
+		Collection struct {
+			ID      string `json:"id"`
+			BaseURL string `json:"baseUrl"`
+		} `json:"collection"`
+		Server struct {
+			ID      string `json:"id"`
+			BaseURL string `json:"baseUrl"`
+		} `json:"server"`
+		Project struct {
+			ID      string `json:"id"`
+			BaseURL string `json:"baseUrl"`
+		} `json:"project"`
+	} `json:"resourceContainers"`
+	CreatedDate time.Time `json:"createdDate"`
+}
+
+type WITCICreate struct {
+	SubscriptionID string `json:"subscriptionId"`
+	NotificationID int    `json:"notificationId"`
+	ID             string `json:"id"`
+	EventType      string `json:"eventType"`
+	PublisherID    string `json:"publisherId"`
+	Message        struct {
+		HTML string `json:"html"`
+	} `json:"message"`
+	DetailedMessage struct {
+		HTML string `json:"html"`
+	} `json:"detailedMessage"`
+	Resource struct {
+		ID     int `json:"id"`
+		Rev    int `json:"rev"`
+		Fields struct {
+			SystemAreaPath                                      string    `json:"System.AreaPath"`
+			SystemTeamProject                                   string    `json:"System.TeamProject"`
+			SystemIterationPath                                 string    `json:"System.IterationPath"`
+			SystemWorkItemType                                  string    `json:"System.WorkItemType"`
+			SystemState                                         string    `json:"System.State"`
+			SystemReason                                        string    `json:"System.Reason"`
+			SystemAssignedTo                                    string    `json:"System.AssignedTo"`
+			SystemCreatedDate                                   time.Time `json:"System.CreatedDate"`
+			SystemCreatedBy                                     string    `json:"System.CreatedBy"`
+			SystemChangedDate                                   time.Time `json:"System.ChangedDate"`
+			SystemChangedBy                                     string    `json:"System.ChangedBy"`
+			SystemCommentCount                                  int       `json:"System.CommentCount"`
+			SystemTitle                                         string    `json:"System.Title"`
+			SystemBoardColumn                                   string    `json:"System.BoardColumn"`
+			SystemBoardColumnDone                               bool      `json:"System.BoardColumnDone"`
+			MicrosoftVSTSCommonPriority                         int       `json:"Microsoft.VSTS.Common.Priority"`
+			MicrosoftVSTSCommonSeverity                         string    `json:"Microsoft.VSTS.Common.Severity"`
+			MicrosoftVSTSCommonValueArea                        string    `json:"Microsoft.VSTS.Common.ValueArea"`
+			BmClient                                            string    `json:"bm.Client"`
+			BmPlatform                                          string    `json:"bm.Platform"`
+			WEF54E1C90D03E24593955A6C6D847649D5KanbanColumn     string    `json:"WEF_54E1C90D03E24593955A6C6D847649D5_Kanban.Column"`
+			WEF54E1C90D03E24593955A6C6D847649D5KanbanColumnDone bool      `json:"WEF_54E1C90D03E24593955A6C6D847649D5_Kanban.Column.Done"`
+			BmServerVersion                                     string    `json:"bm.ServerVersion"`
+			BmIpadVersion                                       string    `json:"bm.IpadVersion"`
+			BmAndroidVersion                                    string    `json:"bm.AndroidVersion"`
+			WEF461E61775E55407092925710D059FC79KanbanColumn     string    `json:"WEF_461E61775E55407092925710D059FC79_Kanban.Column"`
+			WEF461E61775E55407092925710D059FC79KanbanColumnDone bool      `json:"WEF_461E61775E55407092925710D059FC79_Kanban.Column.Done"`
+			BmZendesk                                           bool      `json:"bm.Zendesk"`
+			BmContract                                          bool      `json:"bm.Contract"`
+			TimeCompletedWorkQA                                 int       `json:"time.CompletedWorkQA"`
+			SystemDescription                                   string    `json:"System.Description"`
+			MicrosoftVSTSTCMSystemInfo                          string    `json:"Microsoft.VSTS.TCM.SystemInfo"`
+			MicrosoftVSTSTCMReproSteps                          string    `json:"Microsoft.VSTS.TCM.ReproSteps"`
+			MicrosoftVSTSCommonAcceptanceCriteria               string    `json:"Microsoft.VSTS.Common.AcceptanceCriteria"`
+		} `json:"fields"`
+		Links struct {
+			Self struct {
+				Href string `json:"href"`
+			} `json:"self"`
+			WorkItemUpdates struct {
+				Href string `json:"href"`
+			} `json:"workItemUpdates"`
+			WorkItemRevisions struct {
+				Href string `json:"href"`
+			} `json:"workItemRevisions"`
+			WorkItemComments struct {
+				Href string `json:"href"`
+			} `json:"workItemComments"`
+			HTML struct {
+				Href string `json:"href"`
+			} `json:"html"`
+			WorkItemType struct {
+				Href string `json:"href"`
+			} `json:"workItemType"`
+			Fields struct {
+				Href string `json:"href"`
+			} `json:"fields"`
+		} `json:"_links"`
+		URL string `json:"url"`
+	} `json:"resource"`
+	ResourceVersion    string `json:"resourceVersion"`
+	ResourceContainers struct {
+		Collection struct {
+			ID      string `json:"id"`
+			BaseURL string `json:"baseUrl"`
+		} `json:"collection"`
+		Server struct {
+			ID      string `json:"id"`
+			BaseURL string `json:"baseUrl"`
+		} `json:"server"`
+		Project struct {
+			ID      string `json:"id"`
+			BaseURL string `json:"baseUrl"`
+		} `json:"project"`
+	} `json:"resourceContainers"`
+	CreatedDate time.Time `json:"createdDate"`
+}
+
 type Build struct {
 	SubscriptionID string `json:"subscriptionId"`
 	NotificationID int    `json:"notificationId"`

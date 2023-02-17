@@ -2,15 +2,17 @@ package main
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"log"
 
 	"github.com/gin-gonic/gin"
 )
 
 func ginBodyLogMiddleware(c *gin.Context) {
-	body, _ := ioutil.ReadAll(c.Request.Body)
-	log.Printf("Request dump: %s\n", string(body))
+	if cfg.Web.Debug {
+		body, _ := io.ReadAll(c.Request.Body)
+		log.Printf("Request dump: %s\n", string(body))
 
-	c.Request.Body = ioutil.NopCloser(bytes.NewReader(body))
+		c.Request.Body = io.NopCloser(bytes.NewReader(body))
+	}
 }
