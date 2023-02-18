@@ -45,8 +45,7 @@ func tfsCIUpdated(ctx *gin.Context) {
 	}
 
 	msg += ci.Message.HTML + "\n\n"
-	msg += `<b>UPDATED</b>` + "\n\n"
-	msg += `Ну че пидрилы слепые`
+	msg += `<b>UPDATED</b>`
 
 	tgSendMessage(msg, cfg.Telegram.CIUpdatesChatID)
 
