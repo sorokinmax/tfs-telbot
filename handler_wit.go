@@ -8,6 +8,26 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func tfsCRCreated(ctx *gin.Context) {
+	var (
+		cr  WITCRCreate
+		msg string
+	)
+	err := ctx.BindJSON(&cr)
+	if err != nil {
+		log.Println(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "json binding error"})
+		return
+	}
+
+	msg += cr.Message.HTML + "\n\n"
+	msg += fmt.Sprintf(`<b>Client:</b> %s`, cr.Resource.Fields.BmClient)
+
+	tgSendMessage(msg, cfg.Telegram.CRCreatesChatID)
+
+	ctx.JSON(http.StatusOK, gin.H{"status": "Done"})
+}
+
 func tfsCICreated(ctx *gin.Context) {
 	var (
 		ci  WITCICreate
