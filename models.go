@@ -2,6 +2,9 @@ package main
 
 import "time"
 
+// https://codebeautify.org/jsonviewer
+// https://mholt.github.io/json-to-go/
+
 type WITCRCreate struct {
 	SubscriptionID string `json:"subscriptionId"`
 	NotificationID int    `json:"notificationId"`
