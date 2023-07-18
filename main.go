@@ -46,6 +46,7 @@ func main() {
 	router.Use(ginBodyLogMiddleware)
 
 	// routes
+	router.POST("/pr/create", tfsPRCreated)
 	router.POST("/cr/create", tfsCRCreated)
 	router.POST("/ci/create", tfsCICreated)
 	router.POST("/ci/update", tfsCIUpdated)

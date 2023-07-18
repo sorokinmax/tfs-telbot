@@ -5,6 +5,132 @@ import "time"
 // https://codebeautify.org/jsonviewer
 // https://mholt.github.io/json-to-go/
 
+type PRCreate struct {
+	SubscriptionID string `json:"subscriptionId"`
+	NotificationID int    `json:"notificationId"`
+	ID             string `json:"id"`
+	EventType      string `json:"eventType"`
+	PublisherID    string `json:"publisherId"`
+	Message        struct {
+		HTML string `json:"html"`
+	} `json:"message"`
+	DetailedMessage struct {
+		HTML string `json:"html"`
+	} `json:"detailedMessage"`
+	Resource struct {
+		Repository struct {
+			ID      string `json:"id"`
+			Name    string `json:"name"`
+			URL     string `json:"url"`
+			Project struct {
+				ID             string    `json:"id"`
+				Name           string    `json:"name"`
+				URL            string    `json:"url"`
+				State          string    `json:"state"`
+				Revision       int       `json:"revision"`
+				Visibility     string    `json:"visibility"`
+				LastUpdateTime time.Time `json:"lastUpdateTime"`
+			} `json:"project"`
+			Size      int    `json:"size"`
+			RemoteURL string `json:"remoteUrl"`
+			SSHURL    string `json:"sshUrl"`
+			WebURL    string `json:"webUrl"`
+		} `json:"repository"`
+		PullRequestID int    `json:"pullRequestId"`
+		CodeReviewID  int    `json:"codeReviewId"`
+		Status        string `json:"status"`
+		CreatedBy     struct {
+			DisplayName string `json:"displayName"`
+			URL         string `json:"url"`
+			Links       struct {
+				Avatar struct {
+					Href string `json:"href"`
+				} `json:"avatar"`
+			} `json:"_links"`
+			ID         string `json:"id"`
+			UniqueName string `json:"uniqueName"`
+			ImageURL   string `json:"imageUrl"`
+			Descriptor string `json:"descriptor"`
+		} `json:"createdBy"`
+		CreationDate          time.Time `json:"creationDate"`
+		Title                 string    `json:"title"`
+		Description           string    `json:"description"`
+		SourceRefName         string    `json:"sourceRefName"`
+		TargetRefName         string    `json:"targetRefName"`
+		MergeStatus           string    `json:"mergeStatus"`
+		IsDraft               bool      `json:"isDraft"`
+		MergeID               string    `json:"mergeId"`
+		LastMergeSourceCommit struct {
+			CommitID string `json:"commitId"`
+			URL      string `json:"url"`
+		} `json:"lastMergeSourceCommit"`
+		LastMergeTargetCommit struct {
+			CommitID string `json:"commitId"`
+			URL      string `json:"url"`
+		} `json:"lastMergeTargetCommit"`
+		LastMergeCommit struct {
+			CommitID string `json:"commitId"`
+			Author   struct {
+				Name  string    `json:"name"`
+				Email string    `json:"email"`
+				Date  time.Time `json:"date"`
+			} `json:"author"`
+			Committer struct {
+				Name  string    `json:"name"`
+				Email string    `json:"email"`
+				Date  time.Time `json:"date"`
+			} `json:"committer"`
+			Comment string `json:"comment"`
+			URL     string `json:"url"`
+		} `json:"lastMergeCommit"`
+		Reviewers []struct {
+			ReviewerURL string `json:"reviewerUrl"`
+			Vote        int    `json:"vote"`
+			HasDeclined bool   `json:"hasDeclined"`
+			IsRequired  bool   `json:"isRequired"`
+			IsFlagged   bool   `json:"isFlagged"`
+			DisplayName string `json:"displayName"`
+			URL         string `json:"url"`
+			Links       struct {
+				Avatar struct {
+					Href string `json:"href"`
+				} `json:"avatar"`
+			} `json:"_links"`
+			ID          string `json:"id"`
+			UniqueName  string `json:"uniqueName"`
+			ImageURL    string `json:"imageUrl"`
+			IsContainer bool   `json:"isContainer"`
+		} `json:"reviewers"`
+		URL   string `json:"url"`
+		Links struct {
+			Web struct {
+				Href string `json:"href"`
+			} `json:"web"`
+			Statuses struct {
+				Href string `json:"href"`
+			} `json:"statuses"`
+		} `json:"_links"`
+		SupportsIterations bool   `json:"supportsIterations"`
+		ArtifactID         string `json:"artifactId"`
+	} `json:"resource"`
+	ResourceVersion    string `json:"resourceVersion"`
+	ResourceContainers struct {
+		Collection struct {
+			ID      string `json:"id"`
+			BaseURL string `json:"baseUrl"`
+		} `json:"collection"`
+		Server struct {
+			ID      string `json:"id"`
+			BaseURL string `json:"baseUrl"`
+		} `json:"server"`
+		Project struct {
+			ID      string `json:"id"`
+			BaseURL string `json:"baseUrl"`
+		} `json:"project"`
+	} `json:"resourceContainers"`
+	CreatedDate time.Time `json:"createdDate"`
+}
+
 type WITCRCreate struct {
 	SubscriptionID string `json:"subscriptionId"`
 	NotificationID int    `json:"notificationId"`

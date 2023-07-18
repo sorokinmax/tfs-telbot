@@ -17,6 +17,7 @@ type Config struct {
 	} `yaml:"web"`
 	Telegram struct {
 		BotToken        string `yaml:"botToken"`
+		PRCreatesChatID int    `yaml:"prCreatesChatID"`
 		CRCreatesChatID int    `yaml:"crCreatesChatID"`
 		CIUpdatesChatID int    `yaml:"ciUpdatesChatID"`
 		CICreatesChatID int    `yaml:"ciCreatesChatID"`
