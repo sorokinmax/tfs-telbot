@@ -38,7 +38,7 @@ func CheckOpenTasks() {
 	}
 
 	if len(query.WorkItemRelations) > 0 {
-		msg := fmt.Sprintf("Есть <b><a href='%s/_queries/query/%s/'>незакрытые задачи</a></b> (%dшт.) на предварительную оценку.\nПросьба лидов команд проверить свои задачи ASAP.\n\n", normalizeUrl(cfg.Tfs.ProjectUrl), cfg.Tfs.AssessmentTasksQueue, len(query.WorkItemRelations))
+		msg := fmt.Sprintf("Есть <b><a href='%s/_queries/query/%s/'>незакрытые задачи</a></b> на предварительную оценку.\nПросьба лидов команд проверить свои задачи ASAP.\n\n", normalizeUrl(cfg.Tfs.ProjectUrl), cfg.Tfs.AssessmentTasksQueue)
 		tgSendMessage(msg, cfg.Telegram.AssessmentTasksChatID)
 	}
 }
