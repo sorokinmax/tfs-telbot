@@ -6,11 +6,13 @@ require (
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-co-op/gocron v1.18.0
 	github.com/kelseyhightower/envconfig v1.4.0
+	github.com/microsoft/azure-devops-go-api/azuredevops/v7 v7.1.0
 	gopkg.in/telebot.v3 v3.1.2
 	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
+	github.com/google/uuid v1.1.2 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	golang.org/x/sync v0.0.0-20220513210516-0976fa681c29 // indirect
 )

@@ -37,12 +37,15 @@ func main() {
 	// regular config reading
 	cron := gocron.NewScheduler(time.Local)
 	cron.Every(1).Minute().Do(readConfigFile, &cfg)
+	cron.Every(1).Day().At(cfg.Tfs.AssessmentTasksDailyNotificationTime).Do(CheckOpenTasks)
 	cron.StartAsync()
+
 	readConfigFile(&cfg)
+	//CheckOpenTasks()
 
 	router := gin.Default()
 
-	// request dumper middleware
+	// request dumper middleware for debug mode
 	router.Use(ginBodyLogMiddleware)
 
 	// routes

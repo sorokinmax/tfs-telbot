@@ -1,9 +1,16 @@
+# Sections can be changed without restarting the application. Config reading period is 1 time per minute.
+
 # web binding
 web:
+  debug: false
   host: ""
   port: "80"
 
-# Sections below can be changed without restarting the application. Config reading period is 1 time per minute.
+tfs:
+  url: "https://dev.azure.com/myorg" # replace value with your organization url
+  pat: "XXXXXXXXXXXXXXXXXXXXXXX"     # replace value with your PAT
+  assessmentTasksQueue: "8aaa647a-c58e-55f8-918c-83beb7faee92"
+  assessmentTasksDailyNotificationTime: "13:00"
 
 # [botToken]
 # Bot token can obtain from @BotFather.
@@ -15,9 +22,13 @@ web:
 
 telegram:
   botToken: "BOT:TOKEN"
-  witChatID: -1234567890
+  crCreatesChatID: -1234567890
+  ciCreatesChatID: -1234567890
+  ciUpdatesChatID: -1234567890
+  prCreatesChatID: -1234567890
   buildChatID: -1234567890
   deployChatID: -1234567890
+  assessmentTasksChatID: -1234567890
 
 # If you don't want to receive notifications from some pipelines, just specify them here
 excludedPipelines:

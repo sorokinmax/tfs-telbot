@@ -15,14 +15,21 @@ type Config struct {
 		Port  string `yaml:"port"`
 		Debug bool   `yaml:"debug"`
 	} `yaml:"web"`
+	Tfs struct {
+		ProjectUrl                           string `yaml:"projectUrl"`
+		Pat                                  string `yaml:"pat"`
+		AssessmentTasksQueue                 string `yaml:"assessmentTasksQueue"`
+		AssessmentTasksDailyNotificationTime string `yaml:"assessmentTasksDailyNotificationTime"`
+	} `yaml:"tfs"`
 	Telegram struct {
-		BotToken        string `yaml:"botToken"`
-		PRCreatesChatID int    `yaml:"prCreatesChatID"`
-		CRCreatesChatID int    `yaml:"crCreatesChatID"`
-		CIUpdatesChatID int    `yaml:"ciUpdatesChatID"`
-		CICreatesChatID int    `yaml:"ciCreatesChatID"`
-		BuildChatID     int    `yaml:"buildChatID"`
-		DeployChatID    int    `yaml:"deployChatID"`
+		BotToken              string `yaml:"botToken"`
+		PRCreatesChatID       int    `yaml:"prCreatesChatID"`
+		CRCreatesChatID       int    `yaml:"crCreatesChatID"`
+		CIUpdatesChatID       int    `yaml:"ciUpdatesChatID"`
+		CICreatesChatID       int    `yaml:"ciCreatesChatID"`
+		BuildChatID           int    `yaml:"buildChatID"`
+		DeployChatID          int    `yaml:"deployChatID"`
+		AssessmentTasksChatID int    `yaml:"assessmentTasksChatID"`
 	} `yaml:"telegram"`
 	ExcludedPipelines struct {
 		Build   []string `yaml:"build"`

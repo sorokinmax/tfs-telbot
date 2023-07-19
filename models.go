@@ -1246,3 +1246,30 @@ type Release struct {
 	} `json:"resourceContainers"`
 	CreatedDate time.Time `json:"createdDate"`
 }
+
+type Query struct {
+	QueryType       string    `json:"queryType"`
+	QueryResultType string    `json:"queryResultType"`
+	AsOf            time.Time `json:"asOf"`
+	Columns         []struct {
+		ReferenceName string `json:"referenceName"`
+		Name          string `json:"name"`
+		URL           string `json:"url"`
+	} `json:"columns"`
+	SortColumns []struct {
+		Field struct {
+			ReferenceName string `json:"referenceName"`
+			Name          string `json:"name"`
+			URL           string `json:"url"`
+		} `json:"field"`
+		Descending bool `json:"descending"`
+	} `json:"sortColumns"`
+	WorkItemRelations []struct {
+		Rel    any `json:"rel"`
+		Source any `json:"source"`
+		Target struct {
+			ID  int    `json:"id"`
+			URL string `json:"url"`
+		} `json:"target"`
+	} `json:"workItemRelations"`
+}
