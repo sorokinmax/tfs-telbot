@@ -34,13 +34,14 @@ func main() {
 	gin.DefaultWriter = io.MultiWriter(os.Stdout, alf)
 	defer alf.Close()
 
+	readConfigFile(&cfg)
+
 	// regular config reading
 	cron := gocron.NewScheduler(time.Local)
 	cron.Every(1).Minute().Do(readConfigFile, &cfg)
 	cron.Every(1).Day().At(cfg.Tfs.AssessmentTasksDailyNotificationTime).Do(CheckOpenTasks)
 	cron.StartAsync()
 
-	readConfigFile(&cfg)
 	//CheckOpenTasks()
 
 	router := gin.Default()
