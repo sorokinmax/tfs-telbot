@@ -10,6 +10,7 @@ import (
 )
 
 func CheckOpenTasks() {
+	log.Println("CheckOpenTasks job stared")
 	client := http.Client{}
 	url := fmt.Sprintf("%s/_apis/wit/wiql/%s?api-version=6.0", normalizeUrl(cfg.Tfs.ProjectUrl), cfg.Tfs.AssessmentTasksQueue)
 	req, err := http.NewRequest(http.MethodGet, url, http.NoBody)

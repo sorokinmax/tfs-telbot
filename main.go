@@ -57,5 +57,6 @@ func main() {
 	router.POST("/build/report", tfsBuildReport)
 	router.POST("/release/begin", tfsReleaseBegin)
 
+	log.Println("tfs-telebot is runing")
 	router.Run(":" + cfg.Web.Port)
 }
