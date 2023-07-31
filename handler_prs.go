@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,10 +21,15 @@ func tfsPRCreated(ctx *gin.Context) {
 		return
 	}
 
-	msg = "🎀🎀🎀\n\n"
+	var reviewers []string
+	for _, reviewer := range pr.Resource.Reviewers {
+		reviewers = append(reviewers, reviewer.DisplayName)
+	}
 
+	msg = "🎀🎀🎀\n\n"
 	msg += fmt.Sprintf(`<b>Title:</b> <a href='%s'>%s</a>`, pr.Resource.Links.Web.Href, pr.Resource.Title) + "\n"
 	msg += fmt.Sprintf(`<b>Author:</b> %s`, pr.Resource.CreatedBy.DisplayName) + "\n"
+	msg += fmt.Sprintf(`<b>Reviewers:</b> %s`, strings.Join(reviewers[:], ",")) + "\n"
 	msg += fmt.Sprintf(`<b>Source:</b> %s`, pr.Resource.SourceRefName) + "\n"
 	msg += fmt.Sprintf(`<b>Target:</b> %s`, pr.Resource.TargetRefName) + "\n"
 	msg += fmt.Sprintf(`<b>Description:</b> %s`, pr.Resource.Description)
