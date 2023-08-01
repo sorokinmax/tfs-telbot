@@ -30,8 +30,8 @@ func tfsPRCreated(ctx *gin.Context) {
 	msg += fmt.Sprintf(`<b>Title:</b> <a href='%s'>%s</a>`, pr.Resource.Links.Web.Href, pr.Resource.Title) + "\n"
 	msg += fmt.Sprintf(`<b>Author:</b> %s`, pr.Resource.CreatedBy.DisplayName) + "\n"
 	msg += fmt.Sprintf(`<b>Reviewers:</b> %s`, strings.Join(reviewers[:], ",")) + "\n"
-	msg += fmt.Sprintf(`<b>Source:</b> %s`, pr.Resource.SourceRefName) + "\n"
-	msg += fmt.Sprintf(`<b>Target:</b> %s`, pr.Resource.TargetRefName) + "\n"
+	msg += fmt.Sprintf(`<b>Source:</b> [%s] %s`, pr.Resource.Repository.Name, strings.TrimPrefix(pr.Resource.SourceRefName, "refs/heads/")) + "\n"
+	msg += fmt.Sprintf(`<b>Target:</b> [%s] %s`, pr.Resource.Repository.Name, strings.TrimPrefix(pr.Resource.TargetRefName, "refs/heads/")) + "\n"
 	msg += fmt.Sprintf(`<b>Description:</b> %s`, pr.Resource.Description)
 
 	tgSendMessage(msg, cfg.Telegram.PRCreatesChatID)
