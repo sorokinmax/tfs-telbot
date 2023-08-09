@@ -39,10 +39,12 @@ func main() {
 	// regular config reading
 	cron := gocron.NewScheduler(time.Local)
 	cron.Every(1).Minute().Do(readConfigFile, &cfg)
-	cron.Every(1).Day().At(cfg.Tfs.AssessmentTasksDailyNotificationTime).Do(CheckOpenTasks)
+	cron.Every(1).Monday().At(cfg.Tfs.AssessmentTasksDailyNotificationTime).Do(CheckOpenTasks)
+	cron.Every(1).Tuesday().At(cfg.Tfs.AssessmentTasksDailyNotificationTime).Do(CheckOpenTasks)
+	cron.Every(1).Wednesday().At(cfg.Tfs.AssessmentTasksDailyNotificationTime).Do(CheckOpenTasks)
+	cron.Every(1).Thursday().At(cfg.Tfs.AssessmentTasksDailyNotificationTime).Do(CheckOpenTasks)
+	cron.Every(1).Friday().At(cfg.Tfs.AssessmentTasksDailyNotificationTime).Do(CheckOpenTasks)
 	cron.StartAsync()
-
-	//CheckOpenTasks()
 
 	router := gin.Default()
 
