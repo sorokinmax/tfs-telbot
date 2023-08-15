@@ -1,7 +1,7 @@
 ##
 ## Build stage
 ##
-FROM golang:1.19.2-alpine3.16 AS builder
+FROM golang:1.21.0-alpine3.18 AS builder
 RUN apk update && apk upgrade
 WORKDIR /src
 COPY . .
@@ -12,7 +12,7 @@ RUN GOOS=linux go build -o /tfs-telbot .
 ##
 ## Final image stage
 ##
-FROM alpine:3.16
+FROM alpine:3.18.3
 WORKDIR /
 COPY --from=builder /tfs-telbot /tfs-telbot
 
