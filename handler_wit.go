@@ -41,7 +41,7 @@ func tfsCICreated(ctx *gin.Context) {
 	}
 
 	msg += ci.Message.HTML + "\n\n"
-	msg += fmt.Sprintf(`<b>Priority:</b> %d\n`, ci.Resource.Fields.MicrosoftVSTSCommonPriority)
+	msg += fmt.Sprintf(`<b>Priority:</b> %d`, ci.Resource.Fields.MicrosoftVSTSCommonPriority) + "\n"
 	msg += fmt.Sprintf(`<b>Client:</b> %s`, ci.Resource.Fields.BmClient)
 
 	tgSendMessage(msg, cfg.Telegram.CICreatesChatID)
