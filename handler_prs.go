@@ -34,7 +34,18 @@ func tfsPRCreated(ctx *gin.Context) {
 	msg += fmt.Sprintf(`<b>Target:</b> [%s] %s`, pr.Resource.Repository.Name, strings.TrimPrefix(pr.Resource.TargetRefName, "refs/heads/")) + "\n"
 	msg += fmt.Sprintf(`<b>Description:</b> %s`, pr.Resource.Description)
 
-	tgSendMessage(msg, cfg.Telegram.PRCreatesChatID)
+	switch pr.Resource.Repository.Name {
+	case cfg.Tfs.BackendRepo:
+		tgSendMessage(msg, cfg.Telegram.PRBackendCreatesChatID)
+	case cfg.Tfs.FrontendRepo:
+		tgSendMessage(msg, cfg.Telegram.PRFrontendCreatesChatID)
+	case cfg.Tfs.AndroidRepo:
+		tgSendMessage(msg, cfg.Telegram.PRAndroidCreatesChatID)
+	case cfg.Tfs.IosRepo:
+		tgSendMessage(msg, cfg.Telegram.PRIosCreatesChatID)
+	default:
+		tgSendMessage(msg, cfg.Telegram.GeneralDevChatID)
+	}
 
 	ctx.JSON(http.StatusOK, gin.H{"status": "Done"})
 }

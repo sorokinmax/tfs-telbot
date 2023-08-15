@@ -20,16 +20,24 @@ type Config struct {
 		Pat                                  string `yaml:"pat"`
 		AssessmentTasksQueue                 string `yaml:"assessmentTasksQueue"`
 		AssessmentTasksDailyNotificationTime string `yaml:"assessmentTasksDailyNotificationTime"`
+		BackendRepo                          string `yaml:"backendRepo"`
+		FrontendRepo                         string `yaml:"frontendRepo"`
+		AndroidRepo                          string `yaml:"androidRepo"`
+		IosRepo                              string `yaml:"iosRepo"`
 	} `yaml:"tfs"`
 	Telegram struct {
-		BotToken              string `yaml:"botToken"`
-		PRCreatesChatID       int    `yaml:"prCreatesChatID"`
-		CRCreatesChatID       int    `yaml:"crCreatesChatID"`
-		CIUpdatesChatID       int    `yaml:"ciUpdatesChatID"`
-		CICreatesChatID       int    `yaml:"ciCreatesChatID"`
-		BuildChatID           int    `yaml:"buildChatID"`
-		DeployChatID          int    `yaml:"deployChatID"`
-		AssessmentTasksChatID int    `yaml:"assessmentTasksChatID"`
+		BotToken                string `yaml:"botToken"`
+		PRBackendCreatesChatID  int    `yaml:"prBackendCreatesChatID"`
+		PRFrontendCreatesChatID int    `yaml:"prFrontendCreatesChatID"`
+		PRAndroidCreatesChatID  int    `yaml:"prAndroidCreatesChatID"`
+		PRIosCreatesChatID      int    `yaml:"prIosCreatesChatID"`
+		CRCreatesChatID         int    `yaml:"crCreatesChatID"`
+		CIUpdatesChatID         int    `yaml:"ciUpdatesChatID"`
+		CICreatesChatID         int    `yaml:"ciCreatesChatID"`
+		BuildChatID             int    `yaml:"buildChatID"`
+		DeployChatID            int    `yaml:"deployChatID"`
+		AssessmentTasksChatID   int    `yaml:"assessmentTasksChatID"`
+		GeneralDevChatID        int    `yaml:"generalDevChatID"`
 	} `yaml:"telegram"`
 	ExcludedPipelines struct {
 		Build   []string `yaml:"build"`

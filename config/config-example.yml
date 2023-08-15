@@ -11,6 +11,11 @@ tfs:
   pat: "XXXXXXXXXXXXXXXXXXXXXXX"     # replace value with your PAT
   assessmentTasksQueue: "8aaa647a-c58e-55f8-918c-83beb7faee92"
   assessmentTasksDailyNotificationTime: "13:00"
+  backendRepo: "bdev"
+  frontendRepo: "fdev"
+  androidRepo: "adev"
+  iosRepo: "idev"
+
 
 # [botToken]
 # Bot token can obtain from @BotFather.
@@ -25,10 +30,14 @@ telegram:
   crCreatesChatID: -1234567890
   ciCreatesChatID: -1234567890
   ciUpdatesChatID: -1234567890
-  prCreatesChatID: -1234567890
+  prBackendCreatesChatID: -1234567890
+  prFrontendCreatesChatID: -1234567890
+  prAndroidCreatesChatID: -1234567890
+  prIosCreatesChatID: -1234567890
   buildChatID: -1234567890
   deployChatID: -1234567890
   assessmentTasksChatID: -1234567890
+  generalDevChatID: -1234567890
 
 # If you don't want to receive notifications from some pipelines, just specify them here
 excludedPipelines:
