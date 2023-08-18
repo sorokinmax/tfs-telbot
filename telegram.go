@@ -7,6 +7,8 @@ import (
 )
 
 func tgSendMessage(msg string, chatID int) (responce *tb.Message) {
+	log.Printf("Sending to chat: %d", chatID)
+
 	tbot, err := tb.NewBot(tb.Settings{
 		Token: cfg.Telegram.BotToken,
 	})
