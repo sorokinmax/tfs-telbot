@@ -1219,7 +1219,14 @@ type Release struct {
 			PreviousReleaseEnvironment struct {
 				Status string `json:"status"`
 			} `json:"previousReleaseEnvironment"`
-			Commits     []interface{} `json:"commits"`
+			Commits []struct {
+				ID         string `json:"id"`
+				Message    string `json:"message"`
+				DisplayURI string `json:"displayUri"`
+				Author     struct {
+					DisplayName string `json:"displayName"`
+				} `json:"author"`
+			} `json:"commits"`
 			TestResults struct {
 			} `json:"testResults"`
 			MoreWorkItemsMessage string `json:"moreWorkItemsMessage"`

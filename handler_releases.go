@@ -40,10 +40,17 @@ func tfsReleaseBegin(ctx *gin.Context) {
 	}
 
 	msg += fmt.Sprintf(`<b>Definition:</b> <a href='%s%s/_release?definitionId=%d'>%s</a>`, release.ResourceContainers.Collection.BaseURL, release.Resource.Project.Name, release.Resource.Environment.ReleaseDefinition.ID, release.Resource.Environment.ReleaseDefinition.Name) + "\n"
-	//msg += fmt.Sprintf(`<b>Target server:</b> %s`, release.Resource.Environment.Name) + "\n"
-	//msg += fmt.Sprintf(`<b>Release name:</b> %s`, release.Resource.SourceBranch) + "\n"
-	//msg += fmt.Sprintf(`<b>Build name:</b> %s`, release.Resource.SourceBranch) + "\n"
 	msg += fmt.Sprintf(`<b>Created by:</b> %s`, release.Resource.Deployment.RequestedBy.DisplayName) + "\n\n"
+
+	msg += "<b>Last commtis:</b>\n"
+	for i, commit := range release.Resource.Data.Commits {
+		if i == 5 {
+			break
+		}
+		msg += fmt.Sprintf(`- <a href='%s'>%s</a>`, commit.DisplayURI, commit.Message) + "\n"
+	}
+	msg += "\n"
+
 	msg += release.Message.HTML + "\n\n"
 
 	for _, deployStep := range release.Resource.Environment.DeploySteps {
