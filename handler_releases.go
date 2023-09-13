@@ -45,6 +45,19 @@ func tfsReleaseBegin(ctx *gin.Context) {
 	//msg += fmt.Sprintf(`<b>Build name:</b> %s`, release.Resource.SourceBranch) + "\n"
 	msg += fmt.Sprintf(`<b>Created by:</b> %s`, release.Resource.Deployment.RequestedBy.DisplayName) + "\n\n"
 	msg += release.Message.HTML + "\n\n"
+
+	for _, deployStep := range release.Resource.Environment.DeploySteps {
+		for _, deployPhase := range deployStep.ReleaseDeployPhases {
+			for _, deploymentJob := range deployPhase.DeploymentJobs {
+				for _, task := range deploymentJob.Tasks {
+					if task.Status != "succeeded" {
+						msg += fmt.Sprintf(`<b>Failed step:</b> %s`, task.Name) + "\n"
+					}
+				}
+			}
+		}
+	}
+
 	msg += fmt.Sprintf(`<a href='%s%s/_releaseProgress?_a=release-environment-logs&releaseId=%d'>Logs</a>`, release.ResourceContainers.Collection.BaseURL, release.Resource.Project.Name, release.Resource.Environment.ReleaseID)
 
 	tgSendMessage(msg, cfg.Telegram.DeployChatID)
