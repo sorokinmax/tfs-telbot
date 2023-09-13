@@ -273,14 +273,29 @@ type WITCIUpdate struct {
 				OldValue time.Time `json:"oldValue"`
 				NewValue time.Time `json:"newValue"`
 			} `json:"System.ChangedDate"`
+			SystemChangedBy struct {
+				OldValue string `json:"oldValue"`
+				NewValue string `json:"newValue"`
+			} `json:"System.ChangedBy"`
+			SystemAuthorizedAs struct {
+				OldValue string `json:"oldValue"`
+				NewValue string `json:"newValue"`
+			} `json:"System.AuthorizedAs"`
+			SystemPersonID struct {
+				OldValue int `json:"oldValue"`
+				NewValue int `json:"newValue"`
+			} `json:"System.PersonId"`
 			SystemWatermark struct {
 				OldValue int `json:"oldValue"`
 				NewValue int `json:"newValue"`
 			} `json:"System.Watermark"`
-			MicrosoftVSTSTCMSystemInfo struct {
+			MicrosoftVSTSCommonValueArea struct {
 				OldValue string `json:"oldValue"`
 				NewValue string `json:"newValue"`
-			} `json:"Microsoft.VSTS.TCM.SystemInfo"`
+			} `json:"Microsoft.VSTS.Common.ValueArea"`
+			BmModule struct {
+				NewValue string `json:"newValue"`
+			} `json:"bm.Module"`
 		} `json:"fields"`
 		Links struct {
 			Self struct {
@@ -307,32 +322,51 @@ type WITCIUpdate struct {
 				SystemWorkItemType                                  string    `json:"System.WorkItemType"`
 				SystemState                                         string    `json:"System.State"`
 				SystemReason                                        string    `json:"System.Reason"`
+				SystemAssignedTo                                    string    `json:"System.AssignedTo"`
 				SystemCreatedDate                                   time.Time `json:"System.CreatedDate"`
 				SystemCreatedBy                                     string    `json:"System.CreatedBy"`
 				SystemChangedDate                                   time.Time `json:"System.ChangedDate"`
 				SystemChangedBy                                     string    `json:"System.ChangedBy"`
 				SystemCommentCount                                  int       `json:"System.CommentCount"`
 				SystemTitle                                         string    `json:"System.Title"`
-				SystemBoardColumn                                   string    `json:"System.BoardColumn"`
 				SystemBoardColumnDone                               bool      `json:"System.BoardColumnDone"`
 				MicrosoftVSTSCommonPriority                         int       `json:"Microsoft.VSTS.Common.Priority"`
 				MicrosoftVSTSCommonSeverity                         string    `json:"Microsoft.VSTS.Common.Severity"`
 				MicrosoftVSTSCommonValueArea                        string    `json:"Microsoft.VSTS.Common.ValueArea"`
 				BmClient                                            string    `json:"bm.Client"`
 				BmPlatform                                          string    `json:"bm.Platform"`
-				WEF54E1C90D03E24593955A6C6D847649D5KanbanColumn     string    `json:"WEF_54E1C90D03E24593955A6C6D847649D5_Kanban.Column"`
+				MicrosoftVSTSCommonBacklogPriority                  float64   `json:"Microsoft.VSTS.Common.BacklogPriority"`
 				WEF54E1C90D03E24593955A6C6D847649D5KanbanColumnDone bool      `json:"WEF_54E1C90D03E24593955A6C6D847649D5_Kanban.Column.Done"`
 				BmServerVersion                                     string    `json:"bm.ServerVersion"`
 				BmIpadVersion                                       string    `json:"bm.IpadVersion"`
 				BmAndroidVersion                                    string    `json:"bm.AndroidVersion"`
-				WEF461E61775E55407092925710D059FC79KanbanColumn     string    `json:"WEF_461E61775E55407092925710D059FC79_Kanban.Column"`
 				WEF461E61775E55407092925710D059FC79KanbanColumnDone bool      `json:"WEF_461E61775E55407092925710D059FC79_Kanban.Column.Done"`
 				BmZendesk                                           bool      `json:"bm.Zendesk"`
 				BmContract                                          bool      `json:"bm.Contract"`
 				TimeCompletedWorkQA                                 int       `json:"time.CompletedWorkQA"`
+				BmModule                                            string    `json:"bm.Module"`
 				SystemDescription                                   string    `json:"System.Description"`
 				MicrosoftVSTSTCMSystemInfo                          string    `json:"Microsoft.VSTS.TCM.SystemInfo"`
+				MicrosoftVSTSTCMReproSteps                          string    `json:"Microsoft.VSTS.TCM.ReproSteps"`
+				MicrosoftVSTSCommonAcceptanceCriteria               string    `json:"Microsoft.VSTS.Common.AcceptanceCriteria"`
 			} `json:"fields"`
+			Relations []struct {
+				Rel        string `json:"rel"`
+				URL        string `json:"url"`
+				Attributes struct {
+					IsLocked bool   `json:"isLocked"`
+					Name     string `json:"name"`
+				} `json:"attributes,omitempty"`
+				Attributes0 struct {
+					AuthorizedDate       time.Time `json:"authorizedDate"`
+					ID                   int       `json:"id"`
+					ResourceCreatedDate  time.Time `json:"resourceCreatedDate"`
+					ResourceModifiedDate time.Time `json:"resourceModifiedDate"`
+					RevisedDate          time.Time `json:"revisedDate"`
+					ResourceSize         int       `json:"resourceSize"`
+					Name                 string    `json:"name"`
+				} `json:"attributes,omitempty"`
+			} `json:"relations"`
 			Links struct {
 				Self struct {
 					Href string `json:"href"`
