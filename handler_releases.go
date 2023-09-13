@@ -8,7 +8,7 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-func tfsReleaseBegin(ctx *gin.Context) {
+func tfsReleaseComplete(ctx *gin.Context) {
 	var (
 		release Release
 		msg     string

@@ -57,7 +57,7 @@ func main() {
 	router.POST("/ci/create", tfsCICreated)
 	router.POST("/ci/update", tfsCIUpdated)
 	router.POST("/build/report", tfsBuildReport)
-	router.POST("/release/begin", tfsReleaseBegin)
+	router.POST("/release/complete", tfsReleaseComplete)
 
 	log.Println("tfs-telebot is runing")
 	router.Run(":" + cfg.Web.Port)
