@@ -357,15 +357,6 @@ type WITCIUpdate struct {
 					IsLocked bool   `json:"isLocked"`
 					Name     string `json:"name"`
 				} `json:"attributes,omitempty"`
-				Attributes0 struct {
-					AuthorizedDate       time.Time `json:"authorizedDate"`
-					ID                   int       `json:"id"`
-					ResourceCreatedDate  time.Time `json:"resourceCreatedDate"`
-					ResourceModifiedDate time.Time `json:"resourceModifiedDate"`
-					RevisedDate          time.Time `json:"revisedDate"`
-					ResourceSize         int       `json:"resourceSize"`
-					Name                 string    `json:"name"`
-				} `json:"attributes,omitempty"`
 			} `json:"relations"`
 			Links struct {
 				Self struct {
@@ -811,11 +802,6 @@ type Release struct {
 							Rank             int           `json:"rank"`
 							Issues           []interface{} `json:"issues"`
 							AgentName        string        `json:"agentName"`
-							Task             struct {
-								ID      string `json:"id"`
-								Name    string `json:"name"`
-								Version string `json:"version"`
-							} `json:"task,omitempty"`
 						} `json:"tasks"`
 					} `json:"deploymentJobs"`
 					ManualInterventions []interface{} `json:"manualInterventions"`
