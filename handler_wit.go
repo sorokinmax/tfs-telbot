@@ -61,7 +61,8 @@ func tfsCIUpdated(ctx *gin.Context) {
 		return
 	}
 	if !ci.Resource.Revision.Fields.BmZendesk {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"cause": "BmZendesk is false"})
+		log.Println("Decline bacause BmZendesk is false")
+		ctx.JSON(http.StatusOK, gin.H{"status": "Decline bacause BmZendesk is false"})
 		return
 	}
 
