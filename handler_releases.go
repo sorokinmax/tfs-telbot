@@ -20,11 +20,9 @@ func tfsReleaseComplete(ctx *gin.Context) {
 		return
 	}
 
+	// 200 because TFS fails the webhook at 4xx codes and disables it
 	if slices.Contains(cfg.ExcludedPipelines.Release, release.Resource.Environment.ReleaseDefinition.Name) {
-		ctx.AbortWithStatusJSON(
-			http.StatusPreconditionFailed,
-			gin.H{"Response": fmt.Sprintf(`Pipeline "%s" is exluded`, release.Resource.Environment.ReleaseDefinition.Name)},
-		)
+		ctx.JSON(http.StatusOK, gin.H{"Response": fmt.Sprintf(`Pipeline "%s" is exluded`, release.Resource.Environment.ReleaseDefinition.Name)})
 		return
 	}
 
