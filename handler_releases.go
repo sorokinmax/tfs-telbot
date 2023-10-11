@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -22,6 +23,7 @@ func tfsReleaseComplete(ctx *gin.Context) {
 
 	// 200 because TFS fails the webhook at 4xx codes and disables it
 	if slices.Contains(cfg.ExcludedPipelines.Release, release.Resource.Environment.ReleaseDefinition.Name) {
+		log.Printf(`Decline: pipeline "%s" is exluded\n`, release.Resource.Environment.ReleaseDefinition.Name)
 		ctx.JSON(http.StatusOK, gin.H{"Response": fmt.Sprintf(`Pipeline "%s" is exluded`, release.Resource.Environment.ReleaseDefinition.Name)})
 		return
 	}

@@ -62,7 +62,7 @@ func tfsCIUpdated(ctx *gin.Context) {
 	}
 	// 200 because TFS fails the webhook at 4xx codes and disables it
 	if !ci.Resource.Revision.Fields.BmZendesk {
-		log.Println("Decline bacause BmZendesk is false")
+		log.Println("Decline: BmZendesk is false")
 		ctx.JSON(http.StatusOK, gin.H{"status": "Decline bacause BmZendesk is false"})
 		return
 	}
