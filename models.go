@@ -1300,3 +1300,99 @@ type Query struct {
 		} `json:"target"`
 	} `json:"workItemRelations"`
 }
+
+type GitMerge struct {
+	SubscriptionID string `json:"subscriptionId"`
+	NotificationID int    `json:"notificationId"`
+	ID             string `json:"id"`
+	EventType      string `json:"eventType"`
+	PublisherID    string `json:"publisherId"`
+	Message        struct {
+		HTML string `json:"html"`
+	} `json:"message"`
+	DetailedMessage struct {
+		HTML string `json:"html"`
+	} `json:"detailedMessage"`
+	Resource struct {
+		Repository struct {
+			ID      string `json:"id"`
+			Name    string `json:"name"`
+			URL     string `json:"url"`
+			Project struct {
+				ID             string `json:"id"`
+				Name           string `json:"name"`
+				URL            string `json:"url"`
+				State          string `json:"state"`
+				Visibility     string `json:"visibility"`
+				LastUpdateTime string `json:"lastUpdateTime"`
+			} `json:"project"`
+			DefaultBranch string `json:"defaultBranch"`
+			RemoteURL     string `json:"remoteUrl"`
+		} `json:"repository"`
+		PullRequestID int    `json:"pullRequestId"`
+		Status        string `json:"status"`
+		CreatedBy     struct {
+			DisplayName string `json:"displayName"`
+			URL         string `json:"url"`
+			ID          string `json:"id"`
+			UniqueName  string `json:"uniqueName"`
+			ImageURL    string `json:"imageUrl"`
+		} `json:"createdBy"`
+		CreationDate          time.Time `json:"creationDate"`
+		ClosedDate            time.Time `json:"closedDate"`
+		Title                 string    `json:"title"`
+		Description           string    `json:"description"`
+		SourceRefName         string    `json:"sourceRefName"`
+		TargetRefName         string    `json:"targetRefName"`
+		MergeStatus           string    `json:"mergeStatus"`
+		MergeID               string    `json:"mergeId"`
+		LastMergeSourceCommit struct {
+			CommitID string `json:"commitId"`
+			URL      string `json:"url"`
+		} `json:"lastMergeSourceCommit"`
+		LastMergeTargetCommit struct {
+			CommitID string `json:"commitId"`
+			URL      string `json:"url"`
+		} `json:"lastMergeTargetCommit"`
+		LastMergeCommit struct {
+			CommitID string `json:"commitId"`
+			URL      string `json:"url"`
+		} `json:"lastMergeCommit"`
+		Reviewers []struct {
+			ReviewerURL string `json:"reviewerUrl"`
+			Vote        int    `json:"vote"`
+			DisplayName string `json:"displayName"`
+			URL         string `json:"url"`
+			ID          string `json:"id"`
+			UniqueName  string `json:"uniqueName"`
+			ImageURL    string `json:"imageUrl"`
+			IsContainer bool   `json:"isContainer"`
+		} `json:"reviewers"`
+		Commits []struct {
+			CommitID string `json:"commitId"`
+			URL      string `json:"url"`
+		} `json:"commits"`
+		URL   string `json:"url"`
+		Links struct {
+			Web struct {
+				Href string `json:"href"`
+			} `json:"web"`
+			Statuses struct {
+				Href string `json:"href"`
+			} `json:"statuses"`
+		} `json:"_links"`
+	} `json:"resource"`
+	ResourceVersion    string `json:"resourceVersion"`
+	ResourceContainers struct {
+		Collection struct {
+			ID string `json:"id"`
+		} `json:"collection"`
+		Account struct {
+			ID string `json:"id"`
+		} `json:"account"`
+		Project struct {
+			ID string `json:"id"`
+		} `json:"project"`
+	} `json:"resourceContainers"`
+	CreatedDate time.Time `json:"createdDate"`
+}
